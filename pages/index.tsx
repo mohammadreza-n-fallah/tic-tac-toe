@@ -6,31 +6,19 @@ import styles from '../styles/Home.module.css'
 export default function Home() {
   const [input,setInput] = useState(true)
   const [win,setWin] = useState("")
-  const [data, setData] = useState<any>({
-    0:"",
-    1:"",
-    2:"",
-    3:"",
-    4:"",
-    5:"",
-    6:"",
-    7:"",
-    8:""
-  })
-
-  useEffect(()=>{
-    checker();
-  },[data])
-  const update=(k:any)=>{
-    if(!data[k] && !win){
-      let value = input? "X":"O";
-      setData({...data,[k]:value});
-      setInput(!input)
-    }
-  }
-
-  const checker=()=>{
-    const arr=[
+  const [data, setData] = useState<any>([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ])
+  const checker = () => {
+    const arr = [
       [0,1,2],
       [3,4,5],
       [6,7,8],
@@ -41,7 +29,7 @@ export default function Home() {
       [2,4,6]
     ]
 
-    arr.map((bd)=>{
+    arr.map((bd) => {
       const [a,b,c] = bd;
       if(
         data[a] &&
@@ -49,20 +37,34 @@ export default function Home() {
         data[a] === data[c]
       )
       {
-        setWin(`win ${!input?"X":"O"}`);
+        setWin(`win ${!input?"X": "O"}`);
       }
     }
     )
   }
+  
+  useEffect(() => {
+    console.log(data)
+    checker();
+  },[data])
+  const update = (k: any) => {
+    if(!data[k] && !win){
+      let value = input? "X": "O";
+      let newArr = [...data];
+      newArr[k] = value;
+      setData(newArr);
+      setInput(!input) 
+    }
+  }
 
   return (
     <div>
-      <p>{input?"run X":"run O"}</p>
+      <p>{input?"run X": "run O"}</p>
       <p>{`${win}`}</p>
-      <div className='box'>
-        {[...Array(9)].map((v,k)=>{
+      <div className = 'box'>
+        {data.map((v: any,k: any) => {
           return(   
-            <div className='sq' key={k} onClick={()=>update(k)}>{data[k]}</div>
+            <div className = 'sq' key = {k} onClick = {() => update(k)}>{v}</div>
           )
         })}
       </div>
